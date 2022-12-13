@@ -20,7 +20,7 @@ void main() {
     expect(sut.isLoading, false);
   });
 
-  group('getArticles | ', () {
+  group('getArticles |', () {
     final articlesFromService = [
       Article(title: 'Test 1', content: 'Test 1 content'),
       Article(title: 'Test 2', content: 'Test 2 content'),
@@ -37,5 +37,21 @@ void main() {
       await sut.getArticles();
       verify(() => mockNewsService.getArticles()).called(1);
     });
+
+    test(
+      """Indicates loading of data,
+      sets articles to the ones from the service,
+      indicates that data is not being loaded anymore""",
+      () async {
+        arrangeNewsServiceReturns3Articles();
+
+        final getArticlesFuture = sut.getArticles();
+
+        expect(sut.isLoading, true);
+        await getArticlesFuture;
+        expect(sut.articles, articlesFromService);
+        expect(sut.isLoading, false);
+      },
+    );
   });
 }
