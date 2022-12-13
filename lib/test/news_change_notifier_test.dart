@@ -1,3 +1,4 @@
+import 'package:flutter_testing_tutorial/article.dart';
 import 'package:flutter_testing_tutorial/news_change_notifier.dart';
 import 'package:flutter_testing_tutorial/news_service.dart';
 import 'package:mocktail/mocktail.dart';
@@ -20,8 +21,19 @@ void main() {
   });
 
   group('getArticles | ', () {
+    final articlesFromService = [
+      Article(title: 'Test 1', content: 'Test 1 content'),
+      Article(title: 'Test 2', content: 'Test 2 content'),
+      Article(title: 'Test 3', content: 'Test 3 content'),
+    ];
+
+    void arrangeNewsServiceReturns3Articles() {
+      when(() => mockNewsService.getArticles())
+          .thenAnswer((_) async => articlesFromService);
+    }
+
     test("gets articles using the NewsService", () async {
-      when(() => mockNewsService.getArticles()).thenAnswer((_) async => []);
+      arrangeNewsServiceReturns3Articles();
       await sut.getArticles();
       verify(() => mockNewsService.getArticles()).called(1);
     });
