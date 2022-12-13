@@ -18,4 +18,12 @@ void main() {
     expect(sut.articles, []);
     expect(sut.isLoading, false);
   });
+
+  group('getArticles | ', () {
+    test("gets articles using the NewsService", () async {
+      when(() => mockNewsService.getArticles()).thenAnswer((_) async => []);
+      await sut.getArticles();
+      verify(() => mockNewsService.getArticles()).called(1);
+    });
+  });
 }
